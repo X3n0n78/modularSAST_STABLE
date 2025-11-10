@@ -80,7 +80,7 @@ sudo apt update
 sudo apt install -y golang-go python3 python3-yaml nodejs npm build-essential libclang-18-dev
 
 # 2. Clone repository
-git clone https://github.com/X3n0n78/modularSAST_proto.git
+git clone https://github.com/X3n0n78/modularSAST_STABLE
 cd modularSAST_proto/modularSAST
 
 # 3. Build analyzers
