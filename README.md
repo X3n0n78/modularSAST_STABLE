@@ -84,10 +84,16 @@ git clone https://github.com/X3n0n78/modularSAST_STABLE
 cd modularSAST_STABLE/modularSAST
 
 # 3. Build analyzers
-make build  # Compiles C++ and Go analyzers
+cd analyzers/cpp
+g++ main.cpp -o cpp_analyzer -I/usr/lib/llvm-18/include -L/usr/lib/llvm-18/lib -lclang
+cd ../..  # Compiles C++ analyzer
+
+cd analyzers/go
+go build -o go_analyzer main.go
+cd ../.. # Compiles Go analyzer
 
 # 4. Build core orchestrator
-go build -o modularSAST ./core/main.go
+go mod tidy
 
 # 5. Run first scan
 ./modularSAST --path=./test_suite
