@@ -81,7 +81,7 @@ sudo apt install -y golang-go python3 python3-yaml nodejs npm build-essential li
 
 # 2. Clone repository
 git clone https://github.com/X3n0n78/modularSAST_STABLE
-cd modularSAST_proto/modularSAST
+cd modularSAST_STABLE/modularSAST
 
 # 3. Build analyzers
 make build  # Compiles C++ and Go analyzers
