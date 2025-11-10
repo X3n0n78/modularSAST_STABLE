@@ -1,0 +1,112 @@
+rules:
+  # --- Buffer Overflow Functions ---
+  - name: "dangerous-function-gets"
+    pattern: "gets"
+    severity: "Critical"
+    message: "The 'gets()' function extremely dangerous, does not check buffer size. Use 'fgets()'-t."
+
+  - name: "dangerous-function-strcpy"
+    pattern: "strcpy"
+    severity: "High"
+    message: "The 'strcpy()' does not check destination buffer size, can cause buffer overflow. Use 'strncpy()' or 'strcpy_s()'-t."
+
+  - name: "dangerous-function-sprintf"
+    pattern: "sprintf"
+    severity: "High"
+    message: "The 'sprintf()' does not check destination buffer size, can cause buffer overflow. Use 'snprintf()'-et."
+
+  - name: "dangerous-function-strcat"
+    pattern: "strcat"
+    severity: "High"
+    message: "The 'strcat()' does not check destination buffer size, can cause buffer overflow. Use 'strncat()'-et."
+
+  - name: "dangerous-function-scanf"
+    pattern: "scanf"
+    severity: "High"
+    message: "The 'scanf()' %s with format buffer overflow can cause vulnerability. Specify maximum size (pl. %99s) or használj biztonságos alternatívát!"
+
+  - name: "dangerous-function-fscanf"
+    pattern: "fscanf"
+    severity: "High"
+    message: "The 'fscanf()' %s with format buffer overflow can cause vulnerability. Specify maximum size or használj biztonságos alternatívát!"
+
+  - name: "dangerous-function-sscanf"
+    pattern: "sscanf"
+    severity: "High"
+    message: "The 'sscanf()' %s with format buffer overflow can cause vulnerability. Specify maximum size or használj biztonságos alternatívát!"
+
+  # --- Memory Functions ---
+  - name: "dangerous-function-memcpy"
+    pattern: "memcpy"
+    severity: "High"
+    message: "The 'memcpy()' méret ellenőrzés nélkül buffer overflow-hoz vezethet. Ellenőrizd a méreteket használat előtt!"
+
+  - name: "dangerous-function-memmove"
+    pattern: "memmove"
+    severity: "Medium"
+    message: "The 'memmove()' méret ellenőrzés nélkül buffer overflow-hoz vezethet. Ellenőrizd a méreteket használat előtt!"
+
+  - name: "dangerous-function-memset"
+    pattern: "memset"
+    severity: "Medium"
+    message: "The 'memset()' helytelen mérettel buffer overflow-hoz vezethet. Ellenőrizd a méreteket használat előtt!"
+
+  # --- Format String Vulnerabilities ---
+  - name: "format-string-printf"
+    pattern: "printf"
+    severity: "Medium"
+    message: "The 'printf()' felhasználó által vezérelt format string-gel format string vulnerability-t okozhat. Használj fix format string-et!"
+
+  - name: "format-string-fprintf"
+    pattern: "fprintf"
+    severity: "Medium"
+    message: "The 'fprintf()' felhasználó által vezérelt format string-gel format string vulnerability-t okozhat."
+
+  # --- Integer Overflow ---
+  - name: "potential-integer-overflow-malloc"
+    pattern: "malloc"
+    severity: "Medium"
+    message: "The 'malloc()' nem ellenőrzött számítással integer overflow-t okozhat. Ellenőrizd az aritmetikát allokálás előtt!"
+
+  - name: "potential-integer-overflow-calloc"
+    pattern: "calloc"
+    severity: "Medium"
+    message: "The 'calloc()' nem ellenőrzött paraméterekkel integer overflow-t okozhat. Ellenőrizd a méreteket!"
+
+  - name: "potential-integer-overflow-realloc"
+    pattern: "realloc"
+    severity: "Medium"
+    message: "The 'realloc()' nem ellenőrzött számítással integer overflow-t okozhat. Ellenőrizd az aritmetikát!"
+
+  # --- System Command Execution ---
+  - name: "command-injection-system"
+    pattern: "system"
+    severity: "Critical"
+    message: "The 'system()' call with unvalidated input command injection sebezhetőséget okoz. Használj biztonságosabb alternatívákat (pl. execve)!"
+
+  - name: "command-injection-popen"
+    pattern: "popen"
+    severity: "High"
+    message: "The 'popen()' call with unvalidated input command injection sebezhetőséget okoz."
+
+  # --- Random Number Generation ---
+  - name: "weak-random-rand"
+    pattern: "rand"
+    severity: "Low"
+    message: "The 'rand()' kriptográfiailag nem biztonságos. Biztonsági célokra használj /dev/urandom-ot or modern C++ <random> library-t!"
+
+  - name: "weak-random-srand"
+    pattern: "srand"
+    severity: "Low"
+    message: "The 'srand()' kriptográfiailag nem biztonságos seed inicializálás. Biztonsági célokra ne használd!"
+
+  # --- File Operations ---
+  - name: "insecure-temp-tmpnam"
+    pattern: "tmpnam"
+    severity: "Medium"
+    message: "The 'tmpnam()' race condition sebezhetőséget okoz. Use 'mkstemp()'-et helyette!"
+
+  - name: "insecure-temp-tempnam"
+    pattern: "tempnam"
+    severity: "Medium"
+    message: "The 'tempnam()' race condition sebezhetőséget okoz. Use 'mkstemp()'-et helyette!"

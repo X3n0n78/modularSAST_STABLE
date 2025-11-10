@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  modularsast:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: modularsast:latest
+    container_name: modularsast
+    volumes:
+      # Mount your source code to scan
+      - ./test_suite:/scan:ro
+      # Mount output directory for reports
+      - ./reports:/app/reports
+    environment:
+      # Optional environment variables
+      - MODULARSAST_CONFIG=/scan/.modularsast.yaml
+    command: ["--path=/scan", "--formats=html,sarif,json,markdown"]
+    working_dir: /app
+
+  # Example: Scan a specific project
+  modularsast-custom:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: modularsast:latest
+    container_name: modularsast-custom
+    volumes:
+      # Replace with your project path
+      - /path/to/your/project:/scan:ro
+      - ./custom-reports:/app/reports
+    command: ["--path=/scan", "--fail-on=High"]
+    profiles:
+      - custom
+
+# Usage:
+# 1. Build the image:
+#    docker-compose build
+#
+# 2. Run a scan on test_suite:
+#    docker-compose up modularsast
+#
+# 3. Run a custom scan:
+#    docker-compose --profile custom up modularsast-custom
+#
+# 4. One-off scan:
+#    docker-compose run --rm modularsast --path=/scan --fail-on=Critical

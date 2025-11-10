@@ -1,0 +1,120 @@
+rules:
+  # --- Command Injection ---
+  - name: "unsafe-exec-command"
+    pattern: "exec.Command"
+    severity: "High"
+    message: "The 'exec.Command' call with single string can allow shell injection. Use argument list."
+
+  - name: "unsafe-exec-commandcontext"
+    pattern: "exec.CommandContext"
+    severity: "High"
+    message: "The 'exec.CommandContext' with unvalidated input can cause command injection vulnerability."
+
+  # --- Path Traversal ---
+  - name: "path-traversal-os-open"
+    pattern: "os.Open"
+    severity: "High"
+    message: "The 'os.Open()' with unvalidated path can cause path traversal vulnerability. Use 'filepath.Clean()' and validation!"
+
+  - name: "path-traversal-os-create"
+    pattern: "os.Create"
+    severity: "High"
+    message: "The 'os.Create()' with unvalidated path can cause path traversal vulnerability. Validate the path!"
+
+  - name: "path-traversal-os-readfile"
+    pattern: "os.ReadFile"
+    severity: "High"
+    message: "The 'os.ReadFile()' with unvalidated path can cause path traversal vulnerability. Use 'filepath.Clean()' and validation!"
+
+  - name: "path-traversal-os-writefile"
+    pattern: "os.WriteFile"
+    severity: "High"
+    message: "The 'os.WriteFile()' with unvalidated path can cause path traversal vulnerability. Validate the path!"
+
+  # --- XSS (Cross-Site Scripting) ---
+  - name: "xss-template-html"
+    pattern: "template.HTML"
+    severity: "High"
+    message: "The 'template.HTML()' nem validált tartalommal can cause XSS vulnerability. Use a Go template engine auto-escaping funkcióját!"
+
+  - name: "xss-template-js"
+    pattern: "template.JS"
+    severity: "High"
+    message: "The 'template.JS()' nem validált tartalommal can cause XSS vulnerability. Kerüld a használatát vagy validáld az inputot!"
+
+  - name: "xss-template-url"
+    pattern: "template.URL"
+    severity: "Medium"
+    message: "The 'template.URL()' nem validált tartalommal open redirect vagy can cause XSS vulnerability."
+
+  # --- Weak Cryptography ---
+  - name: "weak-crypto-md5"
+    pattern: "crypto/md5"
+    severity: "Medium"
+    message: "Az MD5 hash algoritmus kriptográfiai szempontból gyenge és törött. Use SHA-256 vagy erősebbet!"
+
+  - name: "weak-crypto-sha1"
+    pattern: "crypto/sha1"
+    severity: "Medium"
+    message: "A SHA-1 hash algorithm kriptográfiai szempontból gyenge és törött. Use SHA-256 vagy erősebbet!"
+
+  - name: "weak-crypto-des"
+    pattern: "crypto/des"
+    severity: "Critical"
+    message: "A DES titkosítás elavult és törött. Use AES-t instead!"
+
+  - name: "weak-crypto-rc4"
+    pattern: "crypto/rc4"
+    severity: "Critical"
+    message: "Az RC4 titkosítás elavult és törött. Use AES-t instead!"
+
+  # --- SQL Injection ---
+  - name: "sql-injection-exec"
+    pattern: "db.Exec"
+    severity: "Critical"
+    message: "The 'db.Exec()' with string concatenation can cause SQL injection vulnerability. Use parameterized query-ket!"
+
+  - name: "sql-injection-query"
+    pattern: "db.Query"
+    severity: "Critical"
+    message: "The 'db.Query()' with string concatenation can cause SQL injection vulnerability. Use parameterized query-ket!"
+
+  - name: "sql-injection-queryrow"
+    pattern: "db.QueryRow"
+    severity: "Critical"
+    message: "The 'db.QueryRow()' with string concatenation can cause SQL injection vulnerability. Use parameterized query-ket!"
+
+  # --- Insecure Random ---
+  - name: "weak-random-math-rand"
+    pattern: "math/rand"
+    severity: "Medium"
+    message: "The 'math/rand' kriptográfiailag insecure. Biztonsági célokra használj 'crypto/rand'-ot!"
+
+  # --- Insecure TLS ---
+  - name: "insecure-tls-skip-verify"
+    pattern: "InsecureSkipVerify"
+    severity: "High"
+    message: "The 'InsecureSkipVerify: true' kikapcsolja a TLS certificate validációt, MITM támadásnak lehet kitéve!"
+
+  # --- SSRF (Server-Side Request Forgery) ---
+  - name: "ssrf-http-get"
+    pattern: "http.Get"
+    severity: "High"
+    message: "The 'http.Get()' with unvalidated URL SSRF (Server-Side Request Forgery) sebezhetőséget okozhat."
+
+  - name: "ssrf-http-post"
+    pattern: "http.Post"
+    severity: "High"
+    message: "The 'http.Post()' with unvalidated URL can cause SSRF vulnerability."
+
+  # --- Unsafe Reflection ---
+  - name: "unsafe-reflect"
+    pattern: "reflect.ValueOf"
+    severity: "Low"
+    message: "The 'reflect' package usage with unvalidated input biztonsági kockázatot jelenthet."
+
+  # --- Unsafe Package ---
+  - name: "unsafe-package"
+    pattern: "unsafe.Pointer"
+    severity: "Medium"
+    message: "The 'unsafe' package usage memória-biztonság problémákat okozhat. Csak ha feltétlenül szükséges!"

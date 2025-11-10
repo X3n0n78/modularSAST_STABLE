@@ -1,0 +1,172 @@
+# PHP Security Rules
+
+sources:
+  - $_GET
+  - $_POST
+  - $_REQUEST
+  - $_COOKIE
+  - $_SERVER
+  - $_FILES
+  - $_ENV
+
+rules:
+  # --- Remote Code Execution ---
+  - name: "dangerous-function-eval"
+    pattern: "eval"
+    severity: "Critical"
+    message: "The 'eval()' function allows arbitrary code execution. Avoid using it!"
+
+  - name: "dangerous-function-exec"
+    pattern: "exec"
+    severity: "High"
+    message: "The 'exec()' function executes system commands. Use only with validated input!"
+
+  - name: "dangerous-function-system"
+    pattern: "system"
+    severity: "High"
+    message: "The 'system()' function executes shell commands. Command injection risk!"
+
+  - name: "dangerous-function-passthru"
+    pattern: "passthru"
+    severity: "High"
+    message: "The 'passthru()' function executes shell commands with direct output."
+
+  - name: "dangerous-function-shell-exec"
+    pattern: "shell_exec"
+    severity: "High"
+    message: "'shell_exec()' is an alternative to the backtick operator. Command injection risk!"
+
+  - name: "dangerous-function-popen"
+    pattern: "popen"
+    severity: "High"
+    message: "'popen()' opens a file pointer to a process. Command injection risk!"
+
+  - name: "dangerous-function-proc-open"
+    pattern: "proc_open"
+    severity: "High"
+    message: "'proc_open()' starts a process. Use only with safe input!"
+
+  # --- Deserialization ---
+  - name: "dangerous-deserialization-unserialize"
+    pattern: "unserialize"
+    severity: "Critical"
+    message: "'unserialize()' with untrusted data causes RCE vulnerability. Use JSON instead!"
+
+  - name: "dangerous-assertion-assert"
+    pattern: "assert"
+    severity: "High"
+    message: "'assert()' can execute code. Avoid string assertions!"
+
+  # --- File Inclusion ---
+  - name: "file-inclusion-include"
+    pattern: "include"
+    severity: "High"
+    message: "'include' with unvalidated filename causes LFI/RFI vulnerability!"
+
+  - name: "file-inclusion-require"
+    pattern: "require"
+    severity: "High"
+    message: "'require' with unvalidated filename causes LFI/RFI vulnerability!"
+
+  - name: "file-inclusion-include-once"
+    pattern: "include_once"
+    severity: "High"
+    message: "'include_once' with unvalidated filename causes LFI/RFI vulnerability!"
+
+  - name: "file-inclusion-require-once"
+    pattern: "require_once"
+    severity: "High"
+    message: "'require_once' with unvalidated filename causes LFI/RFI vulnerability!"
+
+  # --- SQL Injection ---
+  - name: "sql-injection-mysql-query"
+    pattern: "mysql_query"
+    severity: "Critical"
+    message: "'mysql_query()' is deprecated and causes SQL injection vulnerabilities. Use PDO or mysqli with prepared statements!"
+
+  - name: "sql-injection-mysqli-query"
+    pattern: "mysqli_query"
+    severity: "High"
+    message: "'mysqli_query()' with string concatenation causes SQL injection vulnerability. Use prepared statements!"
+
+  - name: "sql-injection-query"
+    pattern: "->query("
+    severity: "High"
+    message: "The 'query()' method with string concatenation causes SQL injection risk. Use prepared statements!"
+
+  # --- File Operations ---
+  - name: "file-read-file-get-contents"
+    pattern: "file_get_contents"
+    severity: "Medium"
+    message: "'file_get_contents()' with unvalidated URL can cause SSRF or LFI vulnerability!"
+
+  - name: "file-read-fopen"
+    pattern: "fopen"
+    severity: "Medium"
+    message: "'fopen()' with unvalidated path can cause path traversal vulnerability!"
+
+  - name: "file-write-file-put-contents"
+    pattern: "file_put_contents"
+    severity: "Medium"
+    message: "'file_put_contents()' with unvalidated input causes arbitrary file write vulnerability!"
+
+  # --- XSS ---
+  - name: "xss-echo"
+    pattern: "echo"
+    severity: "Medium"
+    message: "'echo' with unescaped user input causes XSS vulnerability. Use 'htmlspecialchars()'!"
+
+  - name: "xss-print"
+    pattern: "print"
+    severity: "Medium"
+    message: "'print' with unescaped user input causes XSS vulnerability. Use 'htmlspecialchars()'!"
+
+  # --- Cryptography ---
+  - name: "weak-hash-md5"
+    pattern: "md5("
+    severity: "Medium"
+    message: "MD5 hash algorithm is cryptographically weak and broken. Use 'password_hash()' for passwords!"
+
+  - name: "weak-hash-sha1"
+    pattern: "sha1("
+    severity: "Medium"
+    message: "SHA-1 hash algorithm is cryptographically weak. Use stronger algorithm!"
+
+  - name: "weak-random-rand"
+    pattern: "rand("
+    severity: "Low"
+    message: "'rand()' is not cryptographically secure. Use 'random_bytes()' or 'random_int()'!"
+
+  - name: "weak-random-mt-rand"
+    pattern: "mt_rand("
+    severity: "Low"
+    message: "'mt_rand()' is not cryptographically secure. Use 'random_bytes()' or 'random_int()'!"
+
+  # --- XXE (XML External Entity) ---
+  - name: "xxe-simplexml-load-string"
+    pattern: "simplexml_load_string"
+    severity: "High"
+    message: "'simplexml_load_string()' may be vulnerable to XXE attack. Disable external entity loading!"
+
+  - name: "xxe-simplexml-load-file"
+    pattern: "simplexml_load_file"
+    severity: "High"
+    message: "'simplexml_load_file()' may be vulnerable to XXE attack. Disable external entity loading!"
+
+  # --- LDAP Injection ---
+  - name: "ldap-injection-ldap-search"
+    pattern: "ldap_search"
+    severity: "High"
+    message: "'ldap_search()' with unescaped input causes LDAP injection vulnerability!"
+
+  # --- Header Injection ---
+  - name: "header-injection-header"
+    pattern: "header("
+    severity: "Medium"
+    message: "'header()' with unvalidated input causes header injection vulnerability!"
+
+  # --- Extract Vulnerability ---
+  - name: "extract-variable-override"
+    pattern: "extract("
+    severity: "High"
+    message: "The 'extract()' function can cause vulnerabilities by overwriting variables. Avoid using it!"

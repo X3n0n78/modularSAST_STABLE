@@ -1,0 +1,134 @@
+# Taint Analysis and Pattern-based Rules
+
+sources:
+  - get_user_input
+  - input
+  - request.form.get
+  - request.args.get
+  - request.cookies.get
+  - request.headers.get
+  - request.json
+  - request.data
+  - os.environ.get
+  - sys.argv
+
+# The "rules" key contains all "SINKS" and "PATTERNS"
+rules:
+  # --- Taint-based sinks (RCE) ---
+  - name: "dangerous-eval"
+    pattern: "eval"
+    severity: "High"
+    message: "The 'eval()' call receives tainted data, which enables arbitrary code execution (RCE)."
+
+  - name: "dangerous-exec"
+    pattern: "exec"
+    severity: "High"
+    message: "The 'exec()' call receives tainted data, which enables arbitrary code execution (RCE)."
+
+  - name: "os-system-injection"
+    pattern: "os.system"
+    severity: "High"
+    message: "The 'os.system()' call receives tainted data, which allows command injection."
+
+  # --- Subprocess command injection ---
+  - name: "subprocess-with-shell-true"
+    pattern: "subprocess.run"
+    severity: "High"
+    message: "'subprocess.run' with 'shell=True' parameter allows Command Injection."
+
+  - name: "subprocess-with-shell-true"
+    pattern: "subprocess.Popen"
+    severity: "High"
+    message: "'subprocess.Popen' with 'shell=True' parameter allows Command Injection."
+
+  # --- SQL Injection ---
+  - name: "sql-injection-execute"
+    pattern: "cursor.execute"
+    severity: "Critical"
+    message: "The 'cursor.execute()' call receives tainted data with string formatting, which can cause SQL injection vulnerability. Use parameterized queries!"
+
+  - name: "sql-injection-executemany"
+    pattern: "cursor.executemany"
+    severity: "Critical"
+    message: "The 'cursor.executemany()' call receives tainted data with string formatting, which can cause SQL injection vulnerability."
+
+  - name: "sql-injection-raw"
+    pattern: "connection.execute"
+    severity: "Critical"
+    message: "The 'connection.execute()' call receives tainted data, which can cause SQL injection vulnerability. Use parameterized queries!"
+
+  # --- Pickle Deserialization ---
+  - name: "pickle-load-untrusted"
+    pattern: "pickle.load"
+    severity: "Critical"
+    message: "'pickle.load()' deserialization from untrusted source can lead to arbitrary code execution (RCE)."
+
+  - name: "pickle-loads-untrusted"
+    pattern: "pickle.loads"
+    severity: "Critical"
+    message: "'pickle.loads()' deserialization from untrusted source can lead to arbitrary code execution (RCE)."
+
+  - name: "yaml-unsafe-load"
+    pattern: "yaml.load"
+    severity: "Critical"
+    message: "'yaml.load()' causes unsafe deserialization vulnerability. Use 'yaml.safe_load()' instead!"
+
+  # --- Path Traversal ---
+  - name: "path-traversal-open"
+    pattern: "open"
+    severity: "High"
+    message: "The 'open()' call receives tainted path, which can lead to path traversal vulnerability."
+
+  - name: "path-traversal-file-operations"
+    pattern: "os.path.join"
+    severity: "Medium"
+    message: "'os.path.join()' with tainted data can cause path traversal vulnerability. Validate the path using 'os.path.realpath()' and 'os.path.commonprefix()'!"
+
+  # --- SSRF (Server-Side Request Forgery) ---
+  - name: "ssrf-requests-get"
+    pattern: "requests.get"
+    severity: "High"
+    message: "The 'requests.get()' call receives tainted URL, which can lead to SSRF (Server-Side Request Forgery) attack."
+
+  - name: "ssrf-requests-post"
+    pattern: "requests.post"
+    severity: "High"
+    message: "The 'requests.post()' call receives tainted URL, which can lead to SSRF (Server-Side Request Forgery) attack."
+
+  - name: "ssrf-urllib-urlopen"
+    pattern: "urllib.request.urlopen"
+    severity: "High"
+    message: "The 'urllib.request.urlopen()' call receives tainted URL, which can lead to SSRF attack."
+
+  - name: "ssrf-httpx-get"
+    pattern: "httpx.get"
+    severity: "High"
+    message: "The 'httpx.get()' call receives tainted URL, which can lead to SSRF attack."
+
+  # --- XSS (Cross-Site Scripting) ---
+  - name: "xss-flask-render-template-string"
+    pattern: "render_template_string"
+    severity: "High"
+    message: "'render_template_string()' with tainted content can cause XSS or SSTI (Server-Side Template Injection) vulnerability."
+
+  # --- XXE (XML External Entity) ---
+  - name: "xxe-etree-parse"
+    pattern: "ET.parse"
+    severity: "High"
+    message: "'xml.etree.ElementTree.parse()' may be vulnerable to XXE (XML External Entity) attack. Disable external entity parsing!"
+
+  - name: "xxe-minidom-parse"
+    pattern: "minidom.parse"
+    severity: "High"
+    message: "'xml.dom.minidom.parse()' can cause XXE vulnerability."
+
+  # --- Weak Cryptography ---
+  - name: "weak-hash-md5"
+    pattern: "hashlib.md5"
+    severity: "Medium"
+    message: "MD5 hash algorithm is cryptographically weak and insecure. Use SHA-256 or stronger!"
+
+  - name: "weak-hash-sha1"
+    pattern: "hashlib.sha1"
+    severity: "Medium"
+    message: "SHA-1 hash algorithm is cryptographically weak and not recommended. Use SHA-256 or stronger!"

@@ -1,0 +1,12 @@
+# Regular expression-based rules (Language-independent)
+# The analyzer searches for the 'pattern' and returns the 'name' as a finding.
+rules:
+  - name: "hardcoded-api-key"
+    pattern: "(?i)(api_key|secret_key|token)[\\s]*[=:]*[\\s]*['\"]([a-zA-Z0-9_.-]{20,})['\"]"
+    severity: "Critical"
+    message: "Likely hard-coded API key or secret (20+ characters). Use environment variables!"
+
+  - name: "hardcoded-password"
+    pattern: "(?i)(password|passwd)[\\s]*[=:]*[\\s]*['\"](.{8,})['\"]"
+    severity: "High"
+    message: "Likely hard-coded password (8+ characters). Do not store passwords in code!"
