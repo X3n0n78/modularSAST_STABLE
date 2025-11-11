@@ -75,28 +75,40 @@ Test conducted on vulnerable code samples across all supported languages:
 ### Method 1: Local Installation (Linux/Ubuntu)
 
 ```bash
-# 1. System dependencies
+# ===================================================================
+# ModularSAST v1.1.0 - Installation Guide
+# ===================================================================
+
+# 1. System Dependencies (Ubuntu/Debian)
 sudo apt update
 sudo apt install -y golang-go python3 python3-yaml nodejs npm build-essential libclang-18-dev
 
-# 2. Clone repository
-git clone https://github.com/X3n0n78/modularSAST_STABLE
-cd modularSAST_STABLE/modularSAST
+# 2. Navigate to the directory
+cd ~/Downloads/modularSAST_STABLE-SAST/modularSAST
 
-# 3. Build analyzers
+# 3. Install Go dependencies
+go mod init modularsast 2>/dev/null || true
+go get gopkg.in/yaml.v3
+
+# 4. Build C++ analyzer (optional, for C/C++ scanning)
 cd analyzers/cpp
 g++ main.cpp -o cpp_analyzer -I/usr/lib/llvm-18/include -L/usr/lib/llvm-18/lib -lclang
-cd ../..  # Compiles C++ analyzer
+cd ../..
 
+# 5. Build Go analyzer (optional, for Go scanning)
 cd analyzers/go
 go build -o go_analyzer main.go
-cd ../.. # Compiles Go analyzer
+cd ../..
 
-# 4. Build core orchestrator
-go mod tidy
+# 6. Build ModularSAST core (MAIN PROGRAM)
+go build -o modularSAST ./core/main.go
 
-# 5. Run first scan
+# 7. Run your first scan!
 ./modularSAST --path=./test_suite
+
+# 8. View reports
+# - Open sast_report.html in browser for visual report
+# - Check report.sarif.json for IDE integration
 ```
 
 ### Method 2: Docker
