@@ -35,72 +35,72 @@ rules:
   - name: "xss-template-html"
     pattern: "template.HTML"
     severity: "High"
-    message: "The 'template.HTML()' nem validált tartalommal can cause XSS vulnerability. Use a Go template engine auto-escaping funkcióját!"
+    message: "The 'template.HTML()' with unvalidated content can cause XSS vulnerability. Use Go template engine auto-escaping feature!"
 
   - name: "xss-template-js"
     pattern: "template.JS"
     severity: "High"
-    message: "The 'template.JS()' nem validált tartalommal can cause XSS vulnerability. Kerüld a használatát vagy validáld az inputot!"
+    message: "The 'template.JS()' with unvalidated content can cause XSS vulnerability. Avoid using it or validate the input!"
 
   - name: "xss-template-url"
     pattern: "template.URL"
     severity: "Medium"
-    message: "The 'template.URL()' nem validált tartalommal open redirect vagy can cause XSS vulnerability."
+    message: "The 'template.URL()' with unvalidated content can cause open redirect or XSS vulnerability."
 
   # --- Weak Cryptography ---
   - name: "weak-crypto-md5"
     pattern: "crypto/md5"
     severity: "Medium"
-    message: "Az MD5 hash algoritmus kriptográfiai szempontból gyenge és törött. Use SHA-256 vagy erősebbet!"
+    message: "The MD5 hash algorithm is cryptographically weak and broken. Use SHA-256 or stronger!"
 
   - name: "weak-crypto-sha1"
     pattern: "crypto/sha1"
     severity: "Medium"
-    message: "A SHA-1 hash algorithm kriptográfiai szempontból gyenge és törött. Use SHA-256 vagy erősebbet!"
+    message: "The SHA-1 hash algorithm is cryptographically weak and broken. Use SHA-256 or stronger!"
 
   - name: "weak-crypto-des"
     pattern: "crypto/des"
     severity: "Critical"
-    message: "A DES titkosítás elavult és törött. Use AES-t instead!"
+    message: "The DES encryption is obsolete and broken. Use AES instead!"
 
   - name: "weak-crypto-rc4"
     pattern: "crypto/rc4"
     severity: "Critical"
-    message: "Az RC4 titkosítás elavult és törött. Use AES-t instead!"
+    message: "The RC4 encryption is obsolete and broken. Use AES instead!"
 
   # --- SQL Injection ---
   - name: "sql-injection-exec"
     pattern: "db.Exec"
     severity: "Critical"
-    message: "The 'db.Exec()' with string concatenation can cause SQL injection vulnerability. Use parameterized query-ket!"
+    message: "The 'db.Exec()' with string concatenation can cause SQL injection vulnerability. Use parameterized queries!"
 
   - name: "sql-injection-query"
     pattern: "db.Query"
     severity: "Critical"
-    message: "The 'db.Query()' with string concatenation can cause SQL injection vulnerability. Use parameterized query-ket!"
+    message: "The 'db.Query()' with string concatenation can cause SQL injection vulnerability. Use parameterized queries!"
 
   - name: "sql-injection-queryrow"
     pattern: "db.QueryRow"
     severity: "Critical"
-    message: "The 'db.QueryRow()' with string concatenation can cause SQL injection vulnerability. Use parameterized query-ket!"
+    message: "The 'db.QueryRow()' with string concatenation can cause SQL injection vulnerability. Use parameterized queries!"
 
   # --- Insecure Random ---
   - name: "weak-random-math-rand"
     pattern: "math/rand"
     severity: "Medium"
-    message: "The 'math/rand' kriptográfiailag insecure. Biztonsági célokra használj 'crypto/rand'-ot!"
+    message: "The 'math/rand' is not cryptographically secure. For security purposes use 'crypto/rand'!"
 
   # --- Insecure TLS ---
   - name: "insecure-tls-skip-verify"
     pattern: "InsecureSkipVerify"
     severity: "High"
-    message: "The 'InsecureSkipVerify: true' kikapcsolja a TLS certificate validációt, MITM támadásnak lehet kitéve!"
+    message: "The 'InsecureSkipVerify: true' disables TLS certificate validation and can be exposed to MITM attack!"
 
   # --- SSRF (Server-Side Request Forgery) ---
   - name: "ssrf-http-get"
     pattern: "http.Get"
     severity: "High"
-    message: "The 'http.Get()' with unvalidated URL SSRF (Server-Side Request Forgery) sebezhetőséget okozhat."
+    message: "The 'http.Get()' with unvalidated URL can cause SSRF (Server-Side Request Forgery) vulnerability."
 
   - name: "ssrf-http-post"
     pattern: "http.Post"
@@ -111,10 +111,10 @@ rules:
   - name: "unsafe-reflect"
     pattern: "reflect.ValueOf"
     severity: "Low"
-    message: "The 'reflect' package usage with unvalidated input biztonsági kockázatot jelenthet."
+    message: "The 'reflect' package usage with unvalidated input can pose a security risk."
 
   # --- Unsafe Package ---
   - name: "unsafe-package"
     pattern: "unsafe.Pointer"
     severity: "Medium"
-    message: "The 'unsafe' package usage memória-biztonság problémákat okozhat. Csak ha feltétlenül szükséges!"
+    message: "The 'unsafe' package usage can cause memory safety problems. Only if absolutely necessary!"
