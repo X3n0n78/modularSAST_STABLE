@@ -33,133 +33,133 @@ rules:
   - name: "xss-eval"
     pattern: "eval("
     severity: "Critical"
-    message: "The 'eval()' usage nem megbízható inputtal RCE vagy can cause XSS vulnerability. Avoid using it!"
+    message: "The 'eval()' usage with untrusted input can cause RCE or XSS vulnerability. Avoid using it!"
 
   - name: "xss-function-constructor"
     pattern: "Function("
     severity: "Critical"
-    message: "The 'Function()' constructor nem megbízható inputtal code injection causes vulnerabilityhat."
+    message: "The 'Function()' constructor with untrusted input causes code injection vulnerability."
 
   - name: "xss-settimeout-string"
     pattern: "setTimeout("
     severity: "High"
-    message: "The 'setTimeout()' with string parameter code injection causes vulnerabilityhat. Use function helyette!"
+    message: "The 'setTimeout()' with string parameter causes code injection vulnerability. Use function instead!"
 
   - name: "xss-setinterval-string"
     pattern: "setInterval("
     severity: "High"
-    message: "The 'setInterval()' with string parameter code injection causes vulnerabilityhat. Use function helyette!"
+    message: "The 'setInterval()' with string parameter causes code injection vulnerability. Use function instead!"
 
   # --- Command Injection (Node.js) ---
   - name: "command-injection-exec"
     pattern: "exec("
     severity: "Critical"
-    message: "The 'child_process.exec()' with unvalidated input command injection causes vulnerability. Use 'execFile()' vagy 'spawn()'!"
+    message: "The 'child_process.exec()' with unvalidated input causes command injection vulnerability. Use 'execFile()' or 'spawn()'!"
 
   - name: "command-injection-execsync"
     pattern: "execSync("
     severity: "Critical"
-    message: "The 'child_process.execSync()' with unvalidated input command injection causes vulnerability."
+    message: "The 'child_process.execSync()' with unvalidated input causes command injection vulnerability."
 
   # --- SQL Injection ---
   - name: "sql-injection-query"
     pattern: ".query("
     severity: "Critical"
-    message: "SQL query string konkatenációval SQL injection causes vulnerability. Use parameterized query-ket!"
+    message: "SQL query with string concatenation causes SQL injection vulnerability. Use parameterized queries!"
 
   - name: "sql-injection-execute"
     pattern: ".execute("
     severity: "Critical"
-    message: "SQL execute string konkatenációval SQL injection causes vulnerability. Use prepared statements-et!"
+    message: "SQL execute with string concatenation causes SQL injection vulnerability. Use prepared statements!"
 
   # --- Path Traversal ---
   - name: "pathraversal-readfile"
     pattern: "fs.readFile("
     severity: "High"
-    message: "The 'fs.readFile()' nem validált elérési útvonallal path traversal causes vulnerabilityhat."
+    message: "The 'fs.readFile()' with unvalidated path can cause path traversal vulnerability."
 
   - name: "pathraversal-readfilesync"
     pattern: "fs.readFileSync("
     severity: "High"
-    message: "The 'fs.readFileSync()' nem validált elérési útvonallal path traversal causes vulnerabilityhat."
+    message: "The 'fs.readFileSync()' with unvalidated path can cause path traversal vulnerability."
 
   - name: "pathraversal-writefile"
     pattern: "fs.writeFile("
     severity: "High"
-    message: "The 'fs.writeFile()' nem validált elérési útvonallal path traversal causes vulnerabilityhat."
+    message: "The 'fs.writeFile()' with unvalidated path can cause path traversal vulnerability."
 
   # --- Weak Cryptography ---
   - name: "weak-crypto-md5"
     pattern: "crypto.createHash('md5')"
     severity: "Medium"
-    message: "Az MD5 hash algoritmus kriptográfiai szempontból gyenge és törött. Use SHA-256 vagy erősebbet!"
+    message: "The MD5 hash algorithm is cryptographically weak and broken. Use SHA-256 or stronger!"
 
   - name: "weak-crypto-sha1"
     pattern: "crypto.createHash('sha1')"
     severity: "Medium"
-    message: "A SHA-1 hash algoritmus kriptográfiai szempontból gyenge és törött. Use SHA-256 vagy erősebbet!"
+    message: "The SHA-1 hash algorithm is cryptographically weak and broken. Use SHA-256 or stronger!"
 
   - name: "weak-random-pseudorandombytes"
     pattern: "crypto.pseudoRandomBytes"
     severity: "Medium"
-    message: "The 'crypto.pseudoRandomBytes()' not cryptographically secure. Use 'crypto.randomBytes()'!"
+    message: "The 'crypto.pseudoRandomBytes()' is not cryptographically secure. Use 'crypto.randomBytes()'!"
 
   - name: "weak-random-math-random"
     pattern: "Math.random()"
     severity: "Low"
-    message: "The 'Math.random()' not cryptographically secure. Biztonsági célokra használj 'crypto.randomBytes()'!"
+    message: "The 'Math.random()' is not cryptographically secure. For security purposes use 'crypto.randomBytes()'!"
 
   # --- Prototype Pollution ---
   - name: "prototype-pollution-merge"
     pattern: "Object.assign("
     severity: "Medium"
-    message: "The 'Object.assign()' nem validált objektummal prototype pollution causes vulnerabilityhat. Ellenőrizd az inputot!"
+    message: "The 'Object.assign()' with unvalidated object can cause prototype pollution vulnerability. Validate the input!"
 
   - name: "prototype-pollution-lodash-merge"
     pattern: "_.merge("
     severity: "Medium"
-    message: "The 'lodash.merge()' nem validált objektummal prototype pollution causes vulnerabilityhat."
+    message: "The 'lodash.merge()' with unvalidated object can cause prototype pollution vulnerability."
 
   # --- Open Redirect ---
   - name: "open-redirect-location"
     pattern: "location.href ="
     severity: "Medium"
-    message: "The 'location.href' with unvalidated URL open redirect causes vulnerabilityhat."
+    message: "The 'location.href' with unvalidated URL can cause open redirect vulnerability."
 
   - name: "open-redirect-window-location"
     pattern: "window.location ="
     severity: "Medium"
-    message: "The 'window.location' with unvalidated URL open redirect causes vulnerabilityhat."
+    message: "The 'window.location' with unvalidated URL can cause open redirect vulnerability."
 
   # --- Insecure Deserialization ---
   - name: "insecure-deserialization-unserialize"
     pattern: "unserialize("
     severity: "Critical"
-    message: "The 'unserialize()' nem megbízható forrásból RCE causes vulnerability. Ne használd nem megbízható inputtal!"
+    message: "The 'unserialize()' from untrusted source causes RCE vulnerability. Do not use with untrusted input!"
 
   - name: "insecure-deserialization-eval-json"
     pattern: "eval("
     severity: "Critical"
-    message: "JSON parse-olásra 'eval()' usage RCE causes vulnerability. Use 'JSON.parse()'!"
+    message: "Using 'eval()' for JSON parsing causes RCE vulnerability. Use 'JSON.parse()'!"
 
   # --- SSRF ---
   - name: "ssrf-fetch"
     pattern: "fetch("
     severity: "High"
-    message: "The 'fetch()' with unvalidated URL SSRF causes vulnerabilityhat."
+    message: "The 'fetch()' with unvalidated URL can cause SSRF vulnerability."
 
   - name: "ssrf-axios-get"
     pattern: "axios.get("
     severity: "High"
-    message: "The 'axios.get()' with unvalidated URL SSRF causes vulnerabilityhat."
+    message: "The 'axios.get()' with unvalidated URL can cause SSRF vulnerability."
 
   - name: "ssrf-request"
     pattern: "request("
     severity: "High"
-    message: "The 'request()' with unvalidated URL SSRF causes vulnerabilityhat."
+    message: "The 'request()' with unvalidated URL can cause SSRF vulnerability."
 
   # --- Regex DoS ---
   - name: "regex-dos"
     pattern: "RegExp("
     severity: "Low"
-    message: "The 'RegExp()' bonyolult regex-szel ReDoS (Regular Expression Denial of Service) támadásnak lehet kitéve."
+    message: "The 'RegExp()' with complex regex can be exposed to ReDoS (Regular Expression Denial of Service) attack."
